@@ -77,9 +77,16 @@ else:
             #determine the different cluster
             epsilon=distance_dbscan(df)
             if epsilon!=0.0:
-                df_cluster=make_cluster(df,epsilon)
+                df_cluster=make_cluster(df,0.017)
                #zones proches des endroits de concentrations
+                distance=[]
                 df_lieux_proche=find_location(df_cluster)
+                df_lieux_proche["Distance_Actuel_Elephant"]=""
+                latitude_actuel=float(df.head(1)["Latitude"].values[0])
+                longitude_actuel=float(df.head(1)["Longitude"].values[0])
+                for index,row in df_lieux_proche.iterrows():
+                   distance_calculer=(geodesic((latitude_actuel,longitude_actuel),(float(row["Latitude"]),float(row["Longitude"]))).km)
+                   df_lieux_proche.loc[index,"Distance_Actuel_Elephant"]=f"{distance_calculer} Km"
                 st.write("Lieux Proches des Zones de fortes concentration")
                 st.dataframe(df_lieux_proche)            
                 fig=px.scatter(df_cluster,x="Longitude",y="Latitude",title=f"Zone de Forte Fréquentation {nom_elephant} du {date_debut} au {date_fin}",color="cluster",labels={"cluster":"niveau de Frequentation"})
@@ -195,7 +202,7 @@ else:
                                     </div>
                             </div>"""
                         heat_map.get_root().html.add_child(f.Element(legend_html))
-                        map.save("heat_map_mode_claire.html")
+                        heat_map.save("heat_map_mode_claire.html")
                         map_html = heat_map._repr_html_()
                         st.components.v1.html(map_html, height=1500)
                         #st_folium(heat_map,width=1000)
