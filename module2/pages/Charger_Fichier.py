@@ -62,7 +62,7 @@ if "chemin_fichier" in st.session_state:
                 st.text(f"Projection de Mercator")
 with st.sidebar:
     st.header('Navigation')
-    st.image("image/elephant.png")
+    st.image("../image/elephant.png")
 uploaded_file=st.file_uploader(label="Charger un fichier .CSV",type=["csv"])
 rep_par_defaut="Excel"
     #creation d'une session pour le stockage du fichier
