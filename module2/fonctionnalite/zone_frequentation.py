@@ -19,7 +19,7 @@ def distance_dbscan(df):
         dataframe_list[0]["point2"].append(coordonnee2)
         dataframe_list[0]["distance"].append(distance)
     dataframe=pd.DataFrame({"point1":dataframe_list[0]["point1"],"point2":dataframe_list[0]["point2"],"distance":dataframe_list[0]["distance"]})
-    epsilon=round(dataframe["distance"].min(),5)
+    epsilon=round(dataframe["distance"].min(),10)
     return epsilon
 
 #fonction to create cluster

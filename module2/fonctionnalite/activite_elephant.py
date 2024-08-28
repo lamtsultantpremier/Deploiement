@@ -175,7 +175,6 @@ def trajet_elephant_km(df):
     data=df.copy().reset_index(drop=True)
     data.sort_values(by="Date_Enregistrement",ascending=False,inplace=True)
     for i in range(1,len(data)):
-        if(i<100):
             coordonee1=(data.loc[i-1,"Latitude"],data.loc[i-1,"Longitude"])
             coordonee2=(data.loc[i,"Latitude"],data.loc[i,"Longitude"])
             #calculer la distance entre les deux points
@@ -227,3 +226,13 @@ def vitesse_jour_nuit_moyenne(df):
     group_unstack=example_group.unstack(fill_value=0)["vitesse"]
     group_unstack.rename(columns={"Jour":"vitesse_moyenne_jour","Nuit":"vitesse_moyenne_nuit"},inplace=True)
     return  group_unstack
+
+def vitesse_moyenne(df):
+    distance_parcourue=trajet_elephant_km(df)["distance"].sum()
+    duree=(trajet_elephant_km(df)["duree_activite"].sum().total_seconds())/3600
+    vitesse=distance_parcourue/duree
+    return vitesse
+def vites_moyenne_jour(df):
+    df_vitesse=trajet_elephant_km(df)
+    vites_moy=df_vitesse["vitesse"].mean()
+    return vites_moy

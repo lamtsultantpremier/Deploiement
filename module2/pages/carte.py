@@ -77,7 +77,7 @@ else:
             #determine the different cluster
             epsilon=distance_dbscan(df)
             if epsilon!=0.0:
-                df_cluster=make_cluster(df,0.017)
+                df_cluster=make_cluster(df,epsilon)
                #zones proches des endroits de concentrations
                 distance=[]
                 df_lieux_proche=find_location(df_cluster)
@@ -92,7 +92,7 @@ else:
                 fig=px.scatter(df_cluster,x="Longitude",y="Latitude",title=f"Zone de Forte Fréquentation {nom_elephant} du {date_debut} au {date_fin}",color="cluster",labels={"cluster":"niveau de Frequentation"})
                 st.plotly_chart(fig)
             else:
-                df_cluster=make_cluster(df,0.03)
+                df_cluster=make_cluster(df,0.011)
                 #zones proches des endroits de concentrations
                 distance=[]
                 df_lieux_proche=find_location(df_cluster)
@@ -454,8 +454,12 @@ else:
                 st.write("Distance de Nuit et Jour en Km")
                 data_n_j=pd.DataFrame({"Distance Nuit":[f"{distance_nuit} Km"],"Distance Jour":[f"{distance_jour} Km"]})
                 st.dataframe(data_n_j)
-            st.text("")
-            st.text("")
+            col4,col5,col6,col7=st.columns(4)
+            with col5:
+                data_sector={"Distance":[distance_nuit,distance_jour],"Type":["Nuit","Jour"]}
+                df_sector=pd.DataFrame(data_sector)
+                form=px.pie(df_sector,names="Type",values="Distance",title=f"Distance Parcourue Jours et Nuits {st.session_state["nom_elephant"]}",width=400,height=400,color_discrete_sequence=["#6F00FF","#17B169"])
+                st.plotly_chart(form)
             options_map=["Afficher tous les déplacements","Afficher les déplacements de Nuit et Jour"]
             map_selected=st.radio("",options_map,horizontal=True)
             if map_selected=="Afficher tous les déplacements":

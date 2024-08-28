@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 from fonctionnalite.traitement import traier_fichier
 from streamlit_option_menu import option_menu
 from fonctionnalite.distance import distance_par_semaine_km,distance_par_mois_km,distance_jour_km,distance_par_annee_km,distance_par_nuit_jour_km,distance_par_jour_metre
-from fonctionnalite.activite_elephant import vitesse_jour_km,vitesse_jour_nuit,vitesse_jour_nuit_moyenne
+from fonctionnalite.activite_elephant import vitesse_jour_km,vitesse_jour_nuit,vitesse_jour_nuit_moyenne,vitesse_moyenne,vites_moyenne_jour
 from io import StringIO
 import locale
 import sys
@@ -15,7 +15,7 @@ import folium
 #definir la date au format francais
 locale.setlocale(locale.LC_TIME,"fr_FR.UTF-8")
 sys.stdout.reconfigure(encoding='utf-8')
-st.set_page_config(page_title="EarthRangers",page_icon="🐘",layout="wide")
+st.set_page_config(page_title="EarthRangers",layout="wide")
 if "chemin_fichier" in st.session_state:
     chemin=st.session_state["chemin_fichier"]
     df_for_name=traier_fichier(chemin)
@@ -151,41 +151,45 @@ if infos=="Distance parcourue":
         st.write(option_selected)
         col1,col2=st.columns(2)
         with col1:
-            st.subheader("Distance par Jour")
+            st.text(f"Distance par Jour {st.session_state['nom_elephant']}")
             distance_jour=distance_jour_km(df)
+            distance_jour_date_debut=pd.to_datetime(distance_jour.tail(1)["Date"].values[0]).date()
+            distance_jour_date_fin=pd.to_datetime(distance_jour.head(1)["Date"].values[0]).date()
             st.dataframe(distance_jour)
         with col2.container(border=True):
-            fig=px.line(distance_jour,x="Date",y="distance",width=600,height=500,title="Distance par Jour")
+            fig=px.line(distance_jour,x="Date",y="distance",width=600,height=500,title=f"Distance par Jour {st.session_state['nom_elephant']} à la date du {distance_jour_date_debut} au {distance_jour_date_fin}")
             st.plotly_chart(fig,selection_mode="points")
     if option_selected=="Distance par Semaine":
         distance_semaine=distance_par_semaine_km(df)
+        distance_semaine_date_fin=pd.to_datetime(distance_semaine.tail(1)["Date"].values[0]).date()
+        distance_semaine_date_debut=pd.to_datetime(distance_semaine.head(1)["Date"].values[0]).date()
         col1,col2=st.columns(2)
         with col1:
-            st.subheader("Distance par Semaine")
+            st.text(f"Distance par Semaine {st.session_state['nom_elephant']}")
             st.dataframe(distance_semaine)
         with col2.container(border=True):
-            fig=px.line(distance_semaine,x="Date",y="distance",width=500,height=500,title="Distance par Semaine")
+            fig=px.line(distance_semaine,x="Date",y="distance",width=500,height=500,title=f"Distance par Semaine {st.session_state['nom_elephant']} à la date du {distance_semaine_date_debut} au {distance_semaine_date_fin}")
             st.plotly_chart(fig,selection_mode="points")
     if option_selected=="Distance par Mois":
         distance_mois=distance_par_mois_km(df)
         col1,col2=st.columns(2)
         with col1:
-            st.subheader("Distance par Mois")
+            st.text(f"Distance par Mois {st.session_state['nom_elephant']}")
             st.dataframe(distance_mois)
         with col2.container(border=True):
             first_record=distance_mois.head(1)
             last_record=distance_mois.tail(1)
             date_debut=pd.to_datetime(first_record["Date"]).dt.date[0]
             date_fin=pd.to_datetime(last_record["Date"]).dt.date[len(distance_mois)-1]
-            date_debut_aff=date_debut.strftime("%d %b %Y")
-            date_fin_aff=date_fin.strftime("%d %b %Y")
-            fig=px.bar(distance_mois,x="Date",y="distance",width=500,height=500,title=f"Courbe des distances du {date_debut_aff} au {date_fin_aff}",labels={"distance":"Distance par Mois"})
+            date_debut_aff=date_debut
+            date_fin_aff=date_fin
+            fig=px.bar(distance_mois,x="Date",y="distance",width=500,height=500,title=f"Courbe des distances du {date_debut_aff} au {date_fin_aff} du male de {st.session_state['nom_elephant']}",labels={"distance":"Distance par Mois"})
             st.plotly_chart(fig,selection_mode="points")
     if option_selected=="Distance par Année":
         distance_annee=distance_par_annee_km(df)
         col1,col2=st.columns(2)
         with col1:
-            st.subheader("Distance par Année")
+            st.text(f"Distance par Année {st.session_state['nom_elephant']}")
             st.dataframe(distance_annee)
         with col2.container(border=True): 
             fig=px.bar(distance_annee,x="Date",y="distance",width=200,height=300)
@@ -212,19 +216,19 @@ if infos=="Distance parcourue":
                 data_sector={"Distance":[dist_nuit,distance_jour],"Type":["Nuit","Jour"]}
                 df_sector=pd.DataFrame(data_sector)
                 with col1:
-                    st.text("Distance de Jour et de Nuit")
+                    st.text(f"Distance {st.session_state["nom_elephant"]}")
                     st.dataframe(df)
                 with col3:
                     st.text("Distance")
                     st.dataframe(df_sector)
-                form=px.pie(df_sector,names="Type",values="Distance",title="Distance Parcourue de Jour et de Nuit",width=500,height=500,color_discrete_sequence=["orange","gray"])
+                form=px.pie(df_sector,names="Type",values="Distance",title=f"Distance Parcourue Jour et Nuit {st.session_state["nom_elephant"]} le {choix}",width=500,height=500,color_discrete_sequence=["orange","gray"])
                 with col5:
                     st.plotly_chart(form)
                 
                 #Debut de la partie concernant la comparaison entre deux date
-                options_compare=["Comparaison entre deux Date",""]
-                choix1=st.radio("",options_compare,horizontal=True)
-                if choix1=="Comparaison entre deux Date":
+            options_compare=["Comparaison entre deux Date",""]
+            choix1=st.radio("",options_compare,horizontal=True)
+            if choix1=="Comparaison entre deux Date":
                     col1,col2,col3=st.columns(3)
                     with col1:
                         with st.expander("Choisi la prémière date"):
@@ -272,7 +276,7 @@ if infos=="Distance parcourue":
                                 st.dataframe(df_diff)
                                 form_diff=px.pie(df_diff,values="Distance",names="Type",color_discrete_sequence=["orange","gray"],width=200,height=200)
                                 st.plotly_chart(form_diff)
-                else:
+            else:
                     st.session_state["nuit2"]=None
                     st.session_state["nuit1"]=None
                     st.session_state["jour1"]=None
@@ -285,8 +289,8 @@ if infos=="Distance parcourue":
         with col2.container(border=True):
              distance_nuit_jour_unstack=distance_nuit_jour.unstack(level="temps")
              distance_nuit_jour_formated=distance_nuit_jour_unstack["Distance_parcourue_km"]
-             fig,ax=plt.subplots(figsize=(6,11))
-             distance_nuit_jour_formated.plot(kind="barh",ax=ax,color={"Jour":"blue","Nuit":"orange"},grid=False)
+             fig,ax=plt.subplots(figsize=(18,12))
+             distance_nuit_jour_formated.head(60).plot(kind="barh",ax=ax,color={"Jour":"blue","Nuit":"orange"},grid=False)
              ax.set_xlabel('Distance_parcourue_Km')
              ax.set_ylabel('Date')
              st.pyplot(fig)
@@ -316,10 +320,12 @@ elif infos=="Vitesse de déplacement":
                 distance=round(dataframe_vitesse["distance_km"].values[0],6)
                 distance_metre=round(distance*1000,5)
                 temps=dataframe_vitesse["duree_heure"].values[0]
+                vitess_moyenne=vites_moyenne_jour(df)
                 st.text(f"Distance en Km : {distance}")
                 st.text(f"distance en Mètre :{distance_metre}")
                 st.text(f"La durée :  {temps}")
                 st.text(f"Vitesse en km/h :{vitesse}")
+                st.text(f"vitesse moyenne: {round(vitess_moyenne,5)}")
        
         fig = go.Figure(go.Indicator(
             mode = "gauge+number",
@@ -339,7 +345,7 @@ elif infos=="Vitesse de déplacement":
         first_dataframe=df_vitesse.sort_values("index",ascending=False).head(1)
         last_date=first_dataframe["index"].values[0]
         last_vitesse=round(first_dataframe["vitesse"].values[0],5)
-        st.text(f"La vitesse parcourue la dernière fois c'est à dire {last_date.strftime("%d/%m/%Y")}")
+        st.text(f"La vitesse de {st.session_state['nom_elephant']} le {last_date.strftime("%d/%m/%Y")}")
         st.dataframe(first_dataframe)
         col1,col2,col3=st.columns(3)
         with col2:
@@ -347,10 +353,13 @@ elif infos=="Vitesse de déplacement":
                 distance=round(first_dataframe["distance_km"].values[0],5)
                 distance_metre=distance*1000
                 temps=first_dataframe["duree_heure"].values[0]
+                vitess_moyenne=vites_moyenne_jour(df)
                 st.text(f"Distance en Km : {distance}")
                 st.text(f"distance en Mètre :{distance_metre}")
                 st.text(f"La durée :  {temps}")
                 st.text(f"Vitesse en km/h :{last_vitesse}")
+                st.text(f"vitesse moyenne: {round(vitess_moyenne,5)}")
+
         fig = go.Figure(go.Indicator(
             mode = "gauge+number",
             value =last_vitesse,
@@ -373,14 +382,14 @@ elif infos=="Vitesse de déplacement":
              df_dist_nuit_jour_unstack=df_vitesse_nuit_jour.unstack(level="temps",fill_value=0)["distance"]
              with col1:
                 st.text("Données Concernant les Vitesse")
-                st.table(df_vitesse_nuit_jour_unstack)
+                st.table(df_vitesse_nuit_jour_unstack.head(10))
                 st.text("Données concernant les Distances")
-                st.table(  df_dist_nuit_jour_unstack)
+                st.table(df_dist_nuit_jour_unstack.head(10))
              with col2:
                 with st.container(border=True):
                     vitesse_display=df_vitesse_nuit_jour_unstack
-                    fig,ax=plt.subplots(figsize=(6,11))
-                    vitesse_display.plot(kind="barh",ax=ax,color={"Jour":"blue","Nuit":"orange"},grid=False)
+                    fig,ax=plt.subplots(figsize=(20,10))
+                    vitesse_display.head(60).plot(kind="barh",ax=ax,color={"Jour":"blue","Nuit":"orange"},grid=False)
                     ax.set_xlabel('vitesse en Km/h')
                     ax.set_ylabel('Date')
                     ax.spines['top'].set_visible(False)
@@ -390,10 +399,13 @@ elif infos=="Vitesse de déplacement":
                     ax.set_title("vitesse de Nuit et de Jours",fontsize=11)
                     st.pyplot(fig)
              st.subheader("Vitesse Moyenne de Jour et de nuit")
+             st.text("Vitesse Moyenne")
+             vit_moy=vitesse_moyenne(df)
+             st.text(vit_moy)
              df_vitesse_moy=vitesse_jour_nuit_moyenne(df)
-             st.table(df_vitesse_moy)
+             st.table(df_vitesse_moy.head(10))
              fig,ax=plt.subplots(figsize=(6,11))
-             df_vitesse_moy.plot(kind="barh",ax=ax,color={"vitesse_moyenne_jour":"gray","vitesse_moyenne_nuit":"green"},grid=False) 
+             df_vitesse_moy.head(10).plot(kind="barh",ax=ax,color={"vitesse_moyenne_jour":"gray","vitesse_moyenne_nuit":"green"},grid=False) 
              ax.set_xlabel=("Vitesse Moyenne")  
              ax.set_ylabel("Date")
              ax.set_title("Vitesse Moyenne de Jour et de Nuit")

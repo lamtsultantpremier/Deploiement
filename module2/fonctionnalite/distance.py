@@ -103,7 +103,7 @@ def distance_jour_km(dt):
            distances.append(distance)
            date.append(index)
     dataframe=pd.DataFrame({"Date":date,"distance":distances})
-    return dataframe
+    return dataframe.sort_values(by="Date",ascending=False)
 #fin de la fonction
 
 #distance par jour et nuit en kilometre retourne un dataframe multi-index
