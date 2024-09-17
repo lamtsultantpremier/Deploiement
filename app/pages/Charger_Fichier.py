@@ -100,9 +100,9 @@ if uploaded_file is not None:
             st.session_state["jour2"]=None
             #Reinitialiser les variables nuit et jours
 if "nom_fichier" in st.session_state and "type_fichier" in st.session_state and "taille_fichier" in st.session_state:
-        st.write(f"Nom du Fichier : {st.session_state["nom_fichier"]}")
-        st.write(f"Type de fichier : {st.session_state["type_fichier"]}")
-        st.write(f" Taille du fichier : {st.session_state["taille_fichier"]} Ko")
+        st.write(f"Nom du Fichier : {st.session_state['nom_fichier']}")
+        st.write(f"Type de fichier : {st.session_state['type_fichier']}")
+        st.write(f" Taille du fichier : {st.session_state['taille_fichier']} Ko")
         st.text("Extrait du contenu du fichier")
         if "df" in st.session_state: 
             df=st.session_state["df"]
