@@ -13,8 +13,6 @@ import sys
 import plotly.graph_objects as go
 import folium
 #definir la date au format francais
-locale.setlocale(locale.LC_TIME,"fr_FR.UTF-8")
-sys.stdout.reconfigure(encoding='utf-8')
 st.set_page_config(page_title="EarthRangers",layout="wide")
 if "chemin_fichier" in st.session_state:
     chemin=st.session_state["chemin_fichier"]
