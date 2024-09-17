@@ -1,9 +1,0 @@
-
-if choix:
-               df=distance_nuit_jour_formated.loc[[choix]]
-               if df.loc[["Date_Enregistrement","Jour"]]==None or df.loc[["Date_Enregistrement","Nuit"]]==None:
-                   if df.loc[["Date_Enregistrement","Jour"]]==None:
-                       df.loc[["Date_Enregistrement","Jour"]]=0
-                   elif df.loc[["Date_Enregistrement","Nuit"]]==None:
-                       df.loc[["Date_Enregistrement","Nuit"]]=0
-               st.dataframe(df)
