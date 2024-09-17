@@ -221,7 +221,7 @@ if infos=="Distance parcourue":
                 with col3:
                     st.text("Distance")
                     st.dataframe(df_sector)
-                form=px.pie(df_sector,names="Type",values="Distance",title=f"Distance Parcourue Jour et Nuit {st.session_state["nom_elephant"]} le {choix}",width=500,height=500,color_discrete_sequence=["orange","gray"])
+                form=px.pie(df_sector,names="Type",values="Distance",title=f"Distance Parcourue Jour et Nuit {st.session_state['nom_elephant']} le {choix}",width=500,height=500,color_discrete_sequence=["orange","gray"])
                 with col5:
                     st.plotly_chart(form)
                 
