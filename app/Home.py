@@ -216,7 +216,7 @@ if infos=="Distance parcourue":
                 data_sector={"Distance":[dist_nuit,distance_jour],"Type":["Nuit","Jour"]}
                 df_sector=pd.DataFrame(data_sector)
                 with col1:
-                    st.text(f"Distance {st.session_state["nom_elephant"]}")
+                    st.text(f"Distance {st.session_state['nom_elephant']}")
                     st.dataframe(df)
                 with col3:
                     st.text("Distance")
