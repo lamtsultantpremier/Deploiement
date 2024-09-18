@@ -433,10 +433,10 @@ else:
         elif carte_selected=="liste des Points":
             data_display=df[["Longitude","Latitude","Date_Enregistrement","Heure_Enregistrement","temps"]]
             st.subheader("Données cartographiques")
-            st.text(f"Nom Elephant:{st.session_state["nom_elephant"]}")
+            st.text(f"Nom Elephant:{st.session_state['nom_elephant']}")
             st.text(f"Nombre de Position géographique: {len(df)}")
-            st.text(f"Date debut: {df.tail(1)["Date_Enregistrement"].values[0]}")
-            st.text(f"Date Fin: {df.head(1)["Date_Enregistrement"].values[0]}")
+            st.text(f"Date debut: {df.tail(1)['Date_Enregistrement'].values[0]}")
+            st.text(f"Date Fin: {df.head(1)['Date_Enregistrement'].values[0]}")
             st.dataframe(data_display)
             col1,col2=st.columns(2)
             data_for_distance=dist_group_temps(df)
