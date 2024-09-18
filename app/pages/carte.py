@@ -677,7 +677,7 @@ else:
                         <p>Trajet de Jour</p>
                     </div>
                     <div style="margin-left:30px">
-                        <p>Du {df.tail(1)["Date_Enregistrement"].values[0]} au {df.head(1)["Date_Enregistrement"].values[0]}
+                        <p>Du {df.tail(1)['Date_Enregistrement'].values[0]} au {df.head(1)['Date_Enregistrement'].values[0]}
                     </div>
                     <div style='display:flex;margin-bottom:10px'>
                         <div style='width:40px;heigth:10px;background:#4B7946;border:1px solid white;'>
