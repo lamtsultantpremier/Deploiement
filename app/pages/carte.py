@@ -458,7 +458,7 @@ else:
             with col5:
                 data_sector={"Distance":[distance_nuit,distance_jour],"Type":["Nuit","Jour"]}
                 df_sector=pd.DataFrame(data_sector)
-                form=px.pie(df_sector,names="Type",values="Distance",title=f"Distance Parcourue Jours et Nuits {st.session_state["nom_elephant"]}",width=400,height=400,color_discrete_sequence=["#6F00FF","#17B169"])
+                form=px.pie(df_sector,names="Type",values="Distance",title=f"Distance Parcourue Jours et Nuits {st.session_state['nom_elephant']}",width=400,height=400,color_discrete_sequence=["#6F00FF","#17B169"])
                 st.plotly_chart(form)
             options_map=["Afficher tous les déplacements","Afficher les déplacements de Nuit et Jour"]
             map_selected=st.radio("",options_map,horizontal=True)
