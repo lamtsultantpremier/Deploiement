@@ -693,7 +693,7 @@ else:
                         html_display=iframe=f.IFrame(html,width=300,height=100)
                         popup=f.Popup(html=html_display)
                         icon1=f.CustomIcon("image/elephant_marke_red.png",icon_size=(16,16))
-                        f.Marker(location=[float(rows["Latitude"]),float(rows["Longitude"])],icon=icon1,tooltip=f"Heure: {rows["Heure_Enregistrement"]}",popup=popup).add_to(map)
+                        f.Marker(location=[float(rows["Latitude"]),float(rows["Longitude"])],icon=icon1,tooltip=f"Heure: {rows['Heure_Enregistrement']}",popup=popup).add_to(map)
                         AntPath(data_line,delay=1000,weight=3,color="yellow",pulse_color="blue",dash_array=[10,10],reverse=False).add_to(map)
                     elif rows["temps"]=="Jour" :
                         html=f"""
