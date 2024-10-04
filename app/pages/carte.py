@@ -708,7 +708,7 @@ else:
                         html_display=iframe=f.IFrame(html,width=300,height=100)
                         popup=f.Popup(html=html_display)
                         icon1=f.CustomIcon("image/elephant_marker.png",icon_size=(16,16))
-                        f.Marker(location=[rows["Latitude"],rows["Longitude"]],icon=icon1,tooltip=f" Heure: {rows["Heure_Enregistrement"]}",popup=popup).add_to(map)
+                        f.Marker(location=[rows["Latitude"],rows["Longitude"]],icon=icon1,tooltip=f" Heure: {rows['Heure_Enregistrement']}",popup=popup).add_to(map)
                 legend_html =f"""
                     <div style='
                             position: fixed; 
