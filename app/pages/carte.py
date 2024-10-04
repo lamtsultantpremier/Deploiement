@@ -557,7 +557,7 @@ else:
                     distance_dataframe_filter.index.name="Date"
                     distance_dataframe_filter.columns=["Distance_En_Km"]
                     distance_dataframe_for_graphique= distance_dataframe_filter.reset_index(drop=False)
-                    fig=px.line(distance_dataframe_for_graphique,x="Date",y="Distance_En_Km",width=1000,height=500,title=f"Distance Parcourue {st.session_state['nom_elephant']} dans la Periode du {df_periode_filter.tail(1)["Date_Enregistrement"].values[0]} au {df_periode_filter.head(1)["Date_Enregistrement"].values[0]}")
+                    fig=px.line(distance_dataframe_for_graphique,x="Date",y="Distance_En_Km",width=1000,height=500,title=f"Distance Parcourue {st.session_state['nom_elephant']} dans la Periode du {df_periode_filter.tail(1)['Date_Enregistrement'].values[0]} au {df_periode_filter.head(1)['Date_Enregistrement'].values[0]}")
                     st.plotly_chart(fig,selection_mode="points")
                     st.write("Sur la carte, Cliquer sur l' Icône pour plus d'informations ")
                     st.image("image/elephant_marker.png",width=20)
