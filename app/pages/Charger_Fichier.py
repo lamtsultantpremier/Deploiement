@@ -5,6 +5,8 @@ import os
 import matplotlib.pyplot as plt
 from pathlib import Path
 from fonctionnalite.traitement import traier_fichier
+st.set_page_config(page_title="ElephantCI",layout="wide",page_icon="🐘")
+st.subheader("🐘 ELEPHANT CI")
 if "chemin_fichier" in st.session_state:
     chemin=st.session_state["chemin_fichier"]
     df_for_name=traier_fichier(chemin)

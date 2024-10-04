@@ -1,7 +1,7 @@
 import pandas as pd
 from geopy.distance import geodesic
 import math
-from fonctionnalite.distance import distance_par_jour_metre,distance_par_jour_m,distance_par_jour_km
+from fonctionnalite.distance import distance_par_jour_m,distance
 #defini si l'éléphant est en Marche ou à l'arrêt en Km et prend en paramètre le DataFrame Originel et aussi sa vitesse
 #definir la période de l'éléphant
 
@@ -115,14 +115,14 @@ def vitesse_jour_km(df):
     vitesse=0.0
     distance=[]
     distances={"index":[],"heure_depart":[],"heure_arrive":[],"distance_km":[],"duree_heure":[],"duree_sec":[],"vitesse":[]}
-    df_change=df.set_index("Date_Enregistrement",drop=True)
+    df_change=df.set_index("Date_Enregistrement",drop=False)
     df_change.index=pd.to_datetime(df_change.index)
     df_grouped=df_change.groupby(pd.Grouper(level="Date_Enregistrement",freq="D"))
     for key,group in df_grouped:
         if not group.empty:
             heure_arrive=group.head(1)["Heure_Enregistrement"].reset_index(drop=True)[0]
             heure_depart=group.tail(1)["Heure_Enregistrement"].reset_index(drop=True)[0]
-            dist=distance_par_jour_km(group)
+            dist=distance(group)
             index=key.date()
             time1=heure_depart
             #Selectionner l'heure de départ
@@ -163,7 +163,7 @@ def vitesse_jour_km(df):
 
 def vitesse_par_nuit_jour_km(dt):
     dt.sort_values(by="Date_Enregistrement",ascending=False,inplace=True)
-    dt1=dt.groupby(by=["Date_Enregistrement","temps","Heure_Enregistrement"]).apply(distance_par_jour_km)
+    dt1=dt.groupby(by=["Date_Enregistrement","temps","Heure_Enregistrement"]).apply(distance)
     dt1=pd.DataFrame(dt1)
     dt1.rename(columns={0:"Distance_parcourue_km"},inplace=True)
     return dt1
